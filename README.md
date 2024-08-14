@@ -3,6 +3,10 @@
 ## Description 
 This is a Python program written to create a GUI interface using Tkinter Lib to enter a valid YouTube video URL, download the video to .mp4 format and play the video in the GUI. 
 
+## Features
+- YouTube URL Support
+- GUI Interface with Playback Buttons (Play, Pause, Resume, Stop)
+
 ## Prerequisites
 - Python 3.x
 - yt-dlp (youtube downloader)
