@@ -3,7 +3,7 @@
 import tkinter as tk
 from tkinter import messagebox
 import yt_dlp
-import pafy
+import platform
 import vlc
 import re
 import os
@@ -12,7 +12,7 @@ class YouTube_GUI:
     def __init__(self, root):
         self.root = root
         self.root.title("Youtube Video Player")
-        self.root.geometry("800x600")
+        self.root.geometry("1000x800")
 
         # URL Input
         self.url_label = tk.Label(root, text="Enter Valid YouTube URL: ")
@@ -49,13 +49,18 @@ class YouTube_GUI:
         self.stop_button = tk.Button(self.control_frame, text="Stop", command=self.stop_video)
         self.stop_button.pack(side=tk.LEFT, padx=5)
 
+        # Volume Slider 
+        self.volume_slider = tk.Scale(self.control_frame, from_=0, to=100, orient=tk.HORIZONTAL, label="Volume")
+        self.volume_slider.set(50) # Volume is default at 50% 
+        self.volume_slider.pack(side=tk.LEFT, padx=5)
+        self.volume_slider.bind("<Motion>", self.volume_video)
 
     def download_vid(self, url):
         ydl_opts = {'format': 'best', 'outtmpl': 'video.mp4',}
         with yt_dlp.YoutubeDL(ydl_opts) as ydl:
  
             ydl.download([url])
-            return 'video.mp4'
+            return 'video.mp4' #get video download as video.mp4
 
     def is_valid_ytb_url(self, url):
     #User regex to check if input url is a valid YouTube link
@@ -71,13 +76,23 @@ class YouTube_GUI:
                 #play video in gui area
                 self.media = self.inst.media_new(vid_path)
                 self.player.set_media(self.media)
-                self.player.set_xwindow(self.video_frame.winfo_id())
+                self.embedded_video()
+                self.volume_video(None) #Set initial volume
                 self.player.play()
             else:
                 messagebox.showerror("Error", "Failed to download YouTube Video.")
         else:        
             messagebox.showerror("URL is invalid", "Enter a valid YouTube URL.")
 
+    def embedded_video(self):
+        #Setup up player for render video inside the video_frame for platform windows, linux, or macOS (darwin)
+        if platform.system() == "Windows":
+            self.player.set_hwnd(self.video_frame.winfo_id())
+        elif platform.system() == "Linux":
+            self.player.set_xwindow(self.video_frame.winfo_id())
+        elif platform.system() == "Darwin":
+            self.player.set_nsobject(self.video_frame.winfo_id())
+    
     def pause_video(self):
         if self.player.is_playing():
             self.player.pause()
@@ -87,10 +102,16 @@ class YouTube_GUI:
             self.player.play()
 
     def stop_video(self):
-        self.player.stop()  
+        self.player.stop()
+        os.remove('video.mp4') 
+
+    def volume_video(self, event): 
+        volume_init = self.volume_slider.get()
+        self.player.audio_set_volume(volume_init)
 
 if __name__ == "__main__":
     root = tk.Tk()
     app = YouTube_GUI(root)
     root.mainloop()
-    os.remove('video.mp4')
+    if os.path.isfile('video.mp4') == True: #Check if video has been stopped
+        os.remove('video.mp4') #Remove video.mp4 after program close.

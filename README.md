@@ -6,6 +6,8 @@ This is a Python program written to create a GUI interface using Tkinter Lib to 
 ## Features
 - YouTube URL Support
 - GUI Interface with Playback Buttons (Play, Pause, Resume, Stop)
+- Added volume slider functionality into GUI Interface (Default volume 50%)
+- Video plays in the embedded video frame area under URL input.
 
 ## Prerequisites
 - Python 3.x
