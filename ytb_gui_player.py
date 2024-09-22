@@ -12,7 +12,7 @@ class YouTube_GUI:
     def __init__(self, root):
         self.root = root
         self.root.title("Youtube Video Player")
-        self.root.geometry("1000x800")
+        self.root.geometry("1280x720")
 
         # URL Input
         self.url_label = tk.Label(root, text="Enter Valid YouTube URL: ")
@@ -54,6 +54,19 @@ class YouTube_GUI:
         self.volume_slider.set(50) # Volume is default at 50% 
         self.volume_slider.pack(side=tk.LEFT, padx=5)
         self.volume_slider.bind("<Motion>", self.volume_video)
+
+        # Video Size Large
+        self.video_large = tk.Button(self.control_frame, text="Full HD 1920x1080", command=self.large_size)
+        self.video_large.pack(side=tk.LEFT, padx=5)
+
+        # Video Size Medium
+        self.video_medium = tk.Button(self.control_frame, text="HD 1280x720", command=self.standard_size)
+        self.video_medium.pack(side=tk.LEFT, padx=5)
+
+        # Video Size Small
+        self.video_small = tk.Button(self.control_frame, text="Standard 640x480", command=self.small_size)
+        self.video_small.pack(side=tk.LEFT, padx=5)
+
 
     def download_vid(self, url):
         ydl_opts = {'format': 'best', 'outtmpl': 'video.mp4',}
@@ -108,6 +121,15 @@ class YouTube_GUI:
     def volume_video(self, event): 
         volume_init = self.volume_slider.get()
         self.player.audio_set_volume(volume_init)
+
+    def large_size(self):
+        self.root.geometry("1920x1080")
+
+    def standard_size(self):
+        self.root.geometry("1280x720")
+        
+    def small_size(self):
+        self.root.geometry("640x480")
 
 if __name__ == "__main__":
     root = tk.Tk()

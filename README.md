@@ -8,6 +8,7 @@ This is a Python program written to create a GUI interface using Tkinter Lib to 
 - GUI Interface with Playback Buttons (Play, Pause, Resume, Stop)
 - Added volume slider functionality into GUI Interface (Default volume 50%)
 - Video plays in the embedded video frame area under URL input.
+- Added Preset Video Sizing between Standard, High Definition, and Full HD sizings.
 
 ## Prerequisites
 - Python 3.x
